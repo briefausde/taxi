@@ -1,0 +1,14 @@
+{
+  "db": {
+    "port": 5432,
+    "database": "taxi",
+    "host": "localhost",
+    "user": "postgres",
+    "password": "postgres",
+    "minsize": 1,
+    "maxsize": 2
+  },
+  "metrics_port": 9100,
+  "host": "0.0.0.0",
+  "port": 8080
+}
