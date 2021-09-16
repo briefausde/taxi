@@ -7,28 +7,27 @@ from taxi.bl.constants import CITIES_COORDINATES_MAP
 from taxi.config import get_config
 
 
+def generate_coordinates(
+    city_coordinates: Dict[str, Any],
+) -> Tuple[float, float, float]:
+    x = random.uniform(
+        city_coordinates['latitude_min'],
+        city_coordinates['latitude_max']
+    )
+    y = random.uniform(
+        city_coordinates['longitude_min'],
+        city_coordinates['longitude_max']
+    )
+    z = random.uniform(
+        city_coordinates['altitude_min'] - 100,
+        city_coordinates['altitude_max'] + 100
+    )
+    return x, y, z
+
+
 def get_request_data(driver_id: int, city: str) -> Dict[str, Any]:
-
-    def _generate_coordinates(
-        city_coordinates: Dict[str, Any],
-    ) -> Tuple[float, float, float]:
-        x = random.uniform(
-            city_coordinates['latitude_min'],
-            city_coordinates['latitude_max']
-        )
-        y = random.uniform(
-            city_coordinates['longitude_min'],
-            city_coordinates['longitude_max']
-        )
-        z = random.uniform(
-            city_coordinates['altitude_min'] - 100,
-            city_coordinates['altitude_max'] + 100
-        )
-        return x, y, z
-
     coordinates = CITIES_COORDINATES_MAP.get(city)
-    latitude, longitude, altitude = _generate_coordinates(coordinates)
-
+    latitude, longitude, altitude = generate_coordinates(coordinates)
     return {
         'driver_id': driver_id,
         'latitude': latitude,
@@ -107,5 +106,6 @@ async def main():
         city=city,
     )
 
-general_loop = asyncio.get_event_loop()
-general_loop.run_until_complete(main())
+if __name__ == '__main__':
+    general_loop = asyncio.get_event_loop()
+    general_loop.run_until_complete(main())

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Integer, DateTime, Float, Boolean
+from sqlalchemy import Integer, DateTime, Float, Boolean, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.schema import MetaData, Column
 
@@ -25,6 +25,7 @@ class RouteDescription(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
     driver_route_id = Column(Integer, nullable=False)
+    description = Column(String(256), nullable=False)
     is_driver_over_speed = Column(Boolean, nullable=False)
     is_correct_driver_altitude = Column(Boolean, nullable=False)
     date_created = Column(DateTime, default=datetime.now, nullable=False)

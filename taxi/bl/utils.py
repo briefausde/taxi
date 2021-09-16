@@ -1,5 +1,7 @@
 from typing import NamedTuple, Optional
+from datetime import datetime, timezone
 
+from aiopg.sa.result import RowProxy
 from geopy.distance import geodesic
 
 from taxi.bl.constants import CITIES_COORDINATES_MAP
@@ -28,25 +30,6 @@ def get_city_by_coordinates(latitude: float, longitude: float) -> Optional[str]:
     return None
 
 
-def is_correct_altitude(coordinate: Coordinate) -> bool:
-    """Check is altitude are in the city coordinate range"""
-    city = get_city_by_coordinates(
-        latitude=coordinate.latitude,
-        longitude=coordinate.longitude,
-    )
-    city_coordinates = CITIES_COORDINATES_MAP.get(city)
-    if not city_coordinates:
-        return False
-
-    altitude_min = city_coordinates['altitude_min']
-    altitude_max = city_coordinates['altitude_max']
-
-    if altitude_min <= coordinate.altitude <= altitude_max:
-        return True
-
-    return False
-
-
 def get_distance_between_coordinates_in_km(
     previous: Coordinate,
     current: Coordinate,
@@ -55,3 +38,30 @@ def get_distance_between_coordinates_in_km(
         (previous.latitude, previous.longitude),
         (current.latitude, current.longitude)
     ).kilometers
+
+
+def calculate_distance_between_coordinates(
+    driver_route: RowProxy,
+    coordinate: Coordinate,
+) -> float:
+    previous_coordinate = Coordinate(
+        latitude=driver_route['latitude'],
+        longitude=driver_route['longitude'],
+        altitude=driver_route['altitude'],
+    )
+    return get_distance_between_coordinates_in_km(
+        previous=previous_coordinate,
+        current=coordinate,
+    )
+
+
+def calculate_distance_by_speed(
+    driver_route: RowProxy,
+    speed: float,
+) -> float:
+    previous_speed = driver_route['speed']
+    previous_datetime = driver_route['date_created']
+
+    route_time = datetime.now(timezone.utc) - previous_datetime
+
+    return ((previous_speed + speed) / 2) * (route_time.seconds / 3600)

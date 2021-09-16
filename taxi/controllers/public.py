@@ -3,7 +3,7 @@ import logging
 from aiohttp import web
 from aiohttp.web import Request
 
-from taxi.bl.coordinates import Coordinate
+from taxi.bl.utils import Coordinate
 from taxi.bl.route import process_driver_route
 from taxi.lib.exceptions import InvalidBodyError
 from taxi.lib.metrics.metrics import coordinates_count
