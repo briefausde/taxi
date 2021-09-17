@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS driver_route (
     date_created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
+CREATE INDEX IF NOT EXISTS ix_driver_route_driver_id ON driver_route(driver_id);
+
 CREATE TABLE IF NOT EXISTS route_description (
     id SERIAL PRIMARY KEY,
     driver_route_id INTEGER NOT NULL,

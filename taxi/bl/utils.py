@@ -13,7 +13,10 @@ class Coordinate(NamedTuple):
     altitude: float
 
 
-def get_city_by_coordinates(latitude: float, longitude: float) -> Optional[str]:
+def get_city_by_coordinates(
+        latitude: float,
+        longitude: float,
+) -> Optional[str]:
     """If the coordinates are in the zone of a city, return this city name"""
     for city, coordinates in CITIES_COORDINATES_MAP.items():
         latitude_min = coordinates['latitude_min']

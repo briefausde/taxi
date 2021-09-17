@@ -2,7 +2,7 @@
   "db": {
     "port": 5432,
     "database": "taxi",
-    "host": "localhost",
+    "host": "db",
     "user": "postgres",
     "password": "postgres",
     "minsize": 1,

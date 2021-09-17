@@ -1,0 +1,60 @@
+version: '3.4'
+
+services:
+  backend:
+    image: taxi
+    build: &build
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    working_dir: /work/taxi
+    ports:
+      - 8080:8080
+      - 9100:9100
+    tty: true
+    stdin_open: true
+    volumes: &app_volumes
+      - ./taxi:/work/taxi/taxi
+    environment: &env
+      - PYTHONPATH=.
+      - PYTHONUNBUFFERED=1
+    command: watchexec --restart --watch 'taxi' --exts py -- python3 -m taxi
+    depends_on:
+      - db
+
+  test:
+    image: taxi
+    build:
+      *build
+    working_dir: /work/taxi
+    tty: true
+    stdin_open: true
+    volumes:
+      *app_volumes
+    environment:
+      *env
+    command: pytest
+
+  lint:
+    image: taxi
+    build:
+      *build
+    working_dir: /work/taxi
+    volumes:
+      *app_volumes
+    environment:
+      *env
+    command: flake8
+
+  db:
+    image: 'postgres:13-alpine'
+    environment:
+      POSTGRES_DB: taxi
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /data/postgres
+    volumes:
+      - /var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    restart: unless-stopped

@@ -48,18 +48,18 @@ def process_driver_altitude(coordinate: Coordinate) -> ProcessDescription:
 
     if altitude_min <= coordinate.altitude <= altitude_max:
         return ProcessDescription(
-            detect=True,
+            detect=False,
             description=(
-                f'Driver has incorrect altitude {coordinate.altitude} '
-                f'for city {city.capitalize()}.'
+                f'Driver altitude {coordinate.altitude} '
+                f'is normal for city {city.capitalize()}.'
             )
         )
 
     return ProcessDescription(
-        detect=False,
+        detect=True,
         description=(
-            f'Driver altitude {coordinate.altitude} '
-            f'is normal for city {city.capitalize()}.'
+            f'Driver has incorrect altitude {coordinate.altitude} '
+            f'for city {city.capitalize()}.'
         )
     )
 
