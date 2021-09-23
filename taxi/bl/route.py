@@ -125,10 +125,10 @@ async def process_driver_route(
 
     driver_incorrect_altitude = process_driver_altitude(coordinate=coordinate)
     if driver_incorrect_altitude.detect:
-        log.info(f'Driver has incorrect altitude', {
-            'driver_id': driver_id,
-            'description': driver_incorrect_altitude.description,
-        })
+        log.info(
+            f'Driver has incorrect altitude. Driver #{driver_id}. '
+            f'{driver_incorrect_altitude.description}'
+        )
         invalid_altitude_count.inc()
 
     driver_over_speed = process_driver_speed(
@@ -137,10 +137,10 @@ async def process_driver_route(
         coordinate=coordinate,
     )
     if driver_over_speed.detect:
-        log.info(f'Driver over speed', {
-            'driver_id': driver_id,
-            'description': driver_over_speed.detect,
-        })
+        log.info(
+            f'Driver over speed. Driver #{driver_id}. '
+            f'{driver_over_speed.description}'
+        )
         over_speed_drivers_count.inc()
 
     driver_route_id = await insert_driver_route(

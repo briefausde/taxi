@@ -104,9 +104,7 @@ async def handle_driver_data(request: Request):
         data = await request_to_dict(request)
         await validate_schema(data, HANDLE_DRIVER_DATA_REQUEST_SCHEMA)
     except InvalidBodyError as e:
-        log.info('Bad request to handle driver data', extra={
-            'error': e.errors
-        })
+        log.info(f'Bad request to handle driver data. Error: {e.errors}')
         return web.json_response({'success': False}, status=BAD_REQUEST_CODE)
 
     coordinate = Coordinate(
